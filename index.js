@@ -2,6 +2,8 @@ const express = require('express');
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+var methodOverride = require('method-override')
+var client = require('twilio')('ACd24666f14b64284b91868bc76e166e02','abbee068902492aab706ac82eb08bf9e');
 
 const app = express();
 
@@ -25,8 +27,10 @@ app.engine('handlebars', exphbs({
 app.set('view engine', 'handlebars');
 
 // Body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+//Method Override Middleware
+app.use(methodOverride('_method'));
 
 // Index Route
 app.get('/', (req, res) => {
@@ -41,6 +45,14 @@ app.get('/about', (req, res) => {
   res.render('about');
 });
 
+//Twilio
+app.get('/testtwilio',(req,res)=>{
+  client.messages.create({
+    from: '+15202144859',
+    to: '+919654869125',
+    body: "Hi Rishabh.."
+  }).then((messsage) => console.log(message.sid));
+});
 //Idea Index Page
 app.get('/ideas',(req,res)=>{
   Idea.find({})
@@ -55,6 +67,18 @@ app.get('/ideas',(req,res)=>{
 // Add Idea Form
 app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
+});
+
+// Edit Idea Form
+app.get('/ideas/edit/:id', (req, res) => {
+  Idea.findOne({
+    _id:req.params.id
+     })
+  .then(idea=>{
+    res.render('ideas/edit',{
+      idea:idea
+    });
+  });
 });
 
 // Process Form
@@ -87,6 +111,30 @@ app.post('/ideas', (req, res) => {
   }
 });
 
+//Edit Form Process
+app.put('/ideas/:id',(req,res)=>{
+  Idea.findOne({
+    _id:req.params.id
+  })
+  .then(idea=>{
+    //new values
+    idea.title = req.body.title;
+    idea.details = req.body.details;
+
+    idea.save()
+      .then(idea=>{
+        res.redirect('/ideas')
+      })
+  });
+});
+
+//Delete Req
+app.delete('/ideas/:id',(req,res)=>{
+  Idea.remove({_id:req.params.id})
+  .then(()=>{
+      res.redirect('/ideas');
+  });
+});
 const port = 5000;
 
 app.listen(port, () =>{
