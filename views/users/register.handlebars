@@ -1,37 +1,26 @@
 <div class="row">
   <div class="col-md-6 mx-auto">
     <div class="card card-body">
+      <img class="logo" src="/img/logo.png">
       <h3 class="text-center">Account Register</h3>
-      <form action="/register" method="post">
+      <form action="/users/register" method="post">
         <div class="form-group">
-          <label for="name">Name </label>
-          <input type="name" class="form-control" name="name" value="{{name}}"
-          required>
-        </div>
-         <div class="form-group">
-        <label for="number">Number</label>
-          <input type="number" class="form-control" name="number" 
-          value="{{number}}"
-          required>
+          <label for="name">Name</label>
+          <input type="text" class="form-control" name="name" value="{{name}}" required>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" class="form-control"  name="email" 
-          value="{{email}}"
-          required>
+          <input type="email" name="email" class="form-control" value="{{email}}" required>
         </div>
-        
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" class="form-control"  name="password" 
-          required>
+          <input type="password" name="password" class="form-control" value="{{password}}" required>
         </div>
-         <div class="form-group">
-          <label for="password1" >Confirm Password</label>
-          <input type="password" class="form-control" name="password1"
-          required>
+        <div class="form-group">
+          <label for="password2">Confirm Password</label>
+          <input type="password" name="password2" class="form-control" value="{{password2}}" required>
         </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
   </div>
